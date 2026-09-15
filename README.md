@@ -76,6 +76,7 @@ repo), and opening it in Claude Code.
 | `docs/adr/` | Architecture decision records: a convention and template; the project adds records. |
 | `library/` | Full-text books as per-chapter markdown, INDEX.md, and prompt-engineering-refs/. Gitignored. |
 | `tools/` | Convert book PDFs into the library, rebuild the index, and check house style. |
+| `tests/` | Unit tests for the tools. Run with `python -m unittest discover -s tests`. |
 | `.githooks/pre-commit` | Blocks em-dashes and AI-attribution in staged files. Enable with git config core.hooksPath .githooks. |
 
 ## The idea
@@ -127,12 +128,28 @@ Convert one or more PDFs into per-chapter markdown, then rebuild the index:
 ```
 python tools/convert_book.py path/to/book.pdf --out library
 python tools/build_index.py --library library
+python tools/build_index.py --check --library library
 ```
 
 `convert_book.py` splits by embedded bookmarks, falls back to scanning for chapter headings,
 and flags scanned or image-only PDFs so you can OCR them first. `build_index.py` assembles
 `library/INDEX.md`, one line per chapter with keywords, which is the retrieval entry point
-every agent greps first.
+every agent greps first. The `--check` run validates the library and writes nothing: it exits
+non-zero when a book has manifest/disk drift or duplicate chapters, so a bad conversion cannot
+slip a broken or doubled index past you. Run it after adding a book, or in CI.
+
+## Tests
+
+The tools carry unit tests (stdlib `unittest`, no extra dependency). Run them from the repo
+root:
+
+```
+python -m unittest discover -s tests
+```
+
+They cover the house-style checker, the `build_index.py --check` integrity gate, and the
+converter's chapter-detection helpers. The converter tests skip automatically when `pymupdf`
+is not installed.
 
 ## House rules
 

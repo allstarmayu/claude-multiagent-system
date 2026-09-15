@@ -34,7 +34,8 @@ Read a file only when your task needs it.
 - docs/standards/ - house standards every artifact references, not restates.
 - docs/roadmap.md - volatile project state: current status, done, open items, next milestone. The /status command reads it.
 - library/ - full-text reference books as markdown, INDEX.md, and the short prompt-engineering-refs/. Gitignored.
-- tools/ - scripts: build the index (build_index.py), convert PDFs (convert_book.py), check house style (check_house_style.py).
+- tools/ - scripts: build the index (build_index.py, with a --check integrity gate), convert PDFs (convert_book.py), check house style (check_house_style.py).
+- tests/ - unit tests for the tools. Run with: python -m unittest discover -s tests
 - .githooks/ - a pre-commit hook that blocks house-rule violations. Enable with: git config core.hooksPath .githooks
 
 <working_method>
