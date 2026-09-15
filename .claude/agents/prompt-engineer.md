@@ -55,7 +55,9 @@ Hold every artifact you write or review to this bar, drawn from the refs:
 - Minimum necessary context. Cut anything that does not change the answer, since
   irrelevant detail dilutes attention and gets over-interpreted.
 - Test cases defined for any runtime prompt: happy path, edge cases, and failure modes,
-  so the prompt can be evaluated rather than eyeballed.
+  so the prompt can be evaluated rather than eyeballed. Follow docs/standards/prompt-evaluation.md
+  for the eval convention, and docs/standards/ai-safety-guardrails.md for any prompt that ships
+  model output to users.
 </quality_bar>
 
 <project_rules>

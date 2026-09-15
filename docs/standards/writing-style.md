@@ -22,5 +22,8 @@ commit messages, prompts, agent definitions, and user-facing copy.
 
 ## Enforcement
 
-A pre-commit hook will scan staged files for rule 1 phrases and the rule 2
-character. Until the hook exists, reviewers check manually.
+Rules 1 and 2 are enforced by tools/check_house_style.py, run two ways: a git
+pre-commit hook (.githooks/pre-commit, enabled with git config core.hooksPath
+.githooks) that blocks a commit whose staged content has a violation, and a Claude
+Code PostToolUse hook (.claude/settings.json) that flags one as files are written.
+The checker exempts the reference library under library/.

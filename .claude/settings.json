@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if PY=$(command -v python || command -v python3); then \"$PY\" \"${CLAUDE_PROJECT_DIR}/tools/check_house_style.py\" --hook; fi"
+          }
+        ]
+      }
+    ]
+  }
+}

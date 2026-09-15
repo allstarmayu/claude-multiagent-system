@@ -26,13 +26,16 @@ README.md has the full setup and reuse guide.
 Read a file only when your task needs it.
 
 - .claude/agents/ - subagent definitions. prompt-engineer.md ships here; the roster grows here.
-- .claude/commands/ - slash commands. commit.md drafts a commit per docs/standards/git-commits.md; status.md reports project state.
+- .claude/commands/ - slash commands: commit.md, status.md, and init-project.md (stand up a new project).
+- .claude/settings.json - a Claude Code hook that flags house-rule violations as files are written.
 - docs/prd/ - product requirements for your project. Ships with only a README; you add brief.md here.
-- docs/prompts/ - reusable task prompts: bootstrap the prompt-engineer, distill a standard from a book.
+- docs/adr/ - architecture decision records. Ships with only a README and template; the project adds records.
+- docs/prompts/ - reusable task prompts: bootstrap the prompt-engineer, distill standards from books, draft a PRD or an ADR.
 - docs/standards/ - house standards every artifact references, not restates.
 - docs/roadmap.md - volatile project state: current status, done, open items, next milestone. The /status command reads it.
 - library/ - full-text reference books as markdown, INDEX.md, and the short prompt-engineering-refs/. Gitignored.
-- tools/ - scripts that build and maintain the library index (build_index.py, convert_book.py).
+- tools/ - scripts: build the index (build_index.py), convert PDFs (convert_book.py), check house style (check_house_style.py).
+- .githooks/ - a pre-commit hook that blocks house-rule violations. Enable with: git config core.hooksPath .githooks
 
 <working_method>
 Project facts come only from docs/prd/ and docs/standards/. Never invent product goals,
@@ -51,12 +54,13 @@ docs/standards/ with its citation, so each standard keeps one home.
 </working_method>
 
 <using_this_scaffold>
-Starting a new project from this scaffold, in order:
+Run /init-project to walk the whole flow interactively, or do it by hand, in order:
 1. Write your product brief at docs/prd/brief.md. It is the source of truth for product facts.
 2. The prompt-engineer already exists (.claude/agents/prompt-engineer.md). Use it to draft the
    agents, commands, and CLAUDE.md files your project needs, one at a time.
-3. Distill house standards from the library with the prompts in docs/prompts/, for example
-   docs/prompts/distill-engineering-principles.md, then review and keep them in docs/standards/.
+3. Distill house standards from the library with the prompts in docs/prompts/ (engineering,
+   testing, and ai-engineering), then review and keep them in docs/standards/. Two standards
+   ship as ready-to-adapt templates: prompt-evaluation.md and ai-safety-guardrails.md.
 4. Add more books with tools/convert_book.py and rebuild the index with tools/build_index.py.
 See README.md for the commands.
 </using_this_scaffold>
@@ -78,6 +82,10 @@ not restated.
   reference standards instead of restating them (writing-style rule 5).
 - Never commit on your own initiative. Suggest one Conventional Commits message per artifact
   and stop for review. The /commit command is the human-invoked path.
+- The em-dash and AI-attribution rules are enforced two ways: a git pre-commit hook
+  (.githooks/pre-commit, enabled with git config core.hooksPath .githooks) and a Claude Code hook
+  (.claude/settings.json) that flags violations as files are written. Both call
+  tools/check_house_style.py. The other rules here are held by review.
 </standing_rules>
 
 ## Agent roster

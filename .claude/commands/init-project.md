@@ -1,0 +1,52 @@
+---
+description: Stand up a new project on this scaffold, one artifact at a time
+argument-hint: [optional one-line description of the project]
+---
+
+## Task
+
+Guide me through turning this scaffold into a working project. Optional one-line
+idea from me: $ARGUMENTS
+
+This is a guided, review-gated flow. Do the steps in order, produce one artifact at a
+time, and stop for my review after each. Never commit; suggest a Conventional Commits
+message per artifact per docs/standards/git-commits.md and let me run it. Delegate every
+prompt artifact to the prompt-engineer subagent so it grounds each in the library and
+the standards. Read docs/standards/writing-style.md first and hold it throughout.
+
+## Steps
+
+1. Product brief. Check for docs/prd/brief.md. If it is missing, help me write it: ask
+   for the product's goal, users, scope, stack, constraints, and any safety or
+   compliance rules, and draft docs/prd/brief.md from my answers. Mark anything I have
+   not decided as an open question rather than inventing it. See docs/prd/README.md.
+   Stop for review before moving on. The brief is the source of truth for every step
+   after this.
+
+2. Standards. Distill the house standards the project wants from the library, using the
+   prompts in docs/prompts/. Offer, in this order: engineering principles
+   (distill-engineering-principles.md), the testing standard (distill-testing-standard.md,
+   which builds on the engineering one), the AI-engineering standard
+   (distill-ai-engineering-standard.md) if the project ships model output, and the
+   runtime prompt evaluation and AI safety guardrails standards
+   (docs/standards/prompt-evaluation.md and ai-safety-guardrails.md, which are templates
+   to adapt). Run one at a time and stop for review after each.
+
+3. Project CLAUDE.md. Have the prompt-engineer draft a CLAUDE.md that orients a session
+   to this project: what it is, its repo map, the working method, and the standing rules,
+   referencing the standards rather than restating them. Keep it under 150 lines. Replace
+   the scaffold's CLAUDE.md content with the project's. Stop for review.
+
+4. Agent roster. Propose the subagents the project needs based on the brief (for example
+   a product-manager, an architect, and the engineers for the chosen stack). List them
+   for my approval, then have the prompt-engineer draft each one at a time, stopping for
+   review after each. Record architecturally significant decisions as ADRs using
+   docs/prompts/draft-adr.md.
+
+5. Roadmap. Fill in docs/roadmap.md with the project's current status, done, open items,
+   and next milestone, so /status has real state to report.
+
+## Close
+
+When the steps are done, summarize what was created, what is still an open question from
+the brief, and the suggested commits I can run. Do not commit anything yourself.

@@ -36,7 +36,7 @@ expected for anything non-trivial.
 ## Scopes
 
 The area of the repo as a changelog reader would name it. Starter set for this
-scaffold: agents, commands, tools, standards, prompts, library, docs, ci, deps.
+scaffold: agents, commands, tools, standards, prompts, adr, evals, library, docs, ci, deps.
 Omit the scope when the change is repo-wide. Extend this list in this file as the
 project grows, for example adding mobile, api, or web.
 
