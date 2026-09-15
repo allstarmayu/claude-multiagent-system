@@ -1,0 +1,13 @@
+# reference library: full text of copyrighted books, personal copies, never publish
+library/
+
+# python tooling
+__pycache__/
+*.pyc
+
+# local-only claude code settings
+.claude/settings.local.json
+
+# os noise
+.DS_Store
+Thumbs.db
