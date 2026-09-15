@@ -50,12 +50,12 @@ def chapters_from_bookmarks(doc: pymupdf.Document):
     toc = doc.get_toc(simple=True)
     if not toc:
         return None
-    hits = [(title.strip(), page) for _, title, page in toc if CHAPTER_TOC_RE.match(title.strip())]
+    hits = [(normspace(title), page) for _, title, page in toc if CHAPTER_TOC_RE.match(title.strip())]
     if len(hits) >= 4:
-        return dedupe_increasing(hits)
-    level1 = [(title.strip(), page) for lvl, title, page in toc if lvl == 1]
+        return dedupe_increasing(dedupe_chapter_identity(hits))
+    level1 = [(normspace(title), page) for lvl, title, page in toc if lvl == 1]
     if 5 <= len(level1) <= 60:
-        return dedupe_increasing(level1)
+        return dedupe_increasing(dedupe_chapter_identity(level1))
     return None
 
 
@@ -76,7 +76,7 @@ def chapters_from_page_scan(doc: pymupdf.Document):
             after = text[matches[0].end():].strip().splitlines()
             title_rest = after[0].strip() if after else ""
         if num not in found:
-            found[num] = (f"Chapter {num}: {title_rest}".rstrip(": "), i + 1)
+            found[num] = (normspace(f"Chapter {num}: {title_rest}").rstrip(": "), i + 1)
     if len(found) < 3:
         return None
     ordered = [found[k] for k in sorted(found)]
@@ -90,6 +90,37 @@ def dedupe_increasing(entries):
         if page > last:
             out.append((title, page))
             last = page
+    return out
+
+
+def normspace(title: str) -> str:
+    """Collapse every run of whitespace (newlines, non-breaking spaces) to one ASCII space.
+
+    Bookmark titles arrive with hard line breaks and non-breaking spaces (U+00A0)
+    that would otherwise break the chapter-naming regex and leak into the index.
+    """
+    return re.sub(r"\s+", " ", title).strip()
+
+
+IDENT_RE = re.compile(r"^(chapter|appendix)\s+([0-9]{1,3}|[a-z])\b", re.IGNORECASE)
+
+
+def dedupe_chapter_identity(entries):
+    """Drop later bookmark entries that repeat a chapter/appendix already seen.
+
+    Some PDFs carry an echo outline (a back-matter index or a duplicated set of
+    bookmarks) that points 'Chapter 4' at a second, later page. Keying on the
+    chapter or appendix number and keeping the first occurrence stops those echoes
+    from becoming spurious extra chapters that overwrite the real ones.
+    """
+    seen, out = set(), []
+    for title, page in entries:
+        m = IDENT_RE.match(title)
+        key = (m.group(1).lower(), m.group(2).lower()) if m else ("title", title.lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append((title, page))
     return out
 
 
