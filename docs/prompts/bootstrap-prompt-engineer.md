@@ -1,8 +1,9 @@
 <task>
 Create this project's first Claude Code subagent: a prompt engineer responsible for
 drafting and maintaining every prompt artifact in this repository, including CLAUDE.md
-files, subagent definitions in .claude/agents/, slash commands in .claude/commands/,
-and later the runtime prompts inside the product itself.
+and AGENTS.md files, subagent definitions in .claude/agents/, and slash commands in
+.claude/commands/. When an ai-engineer role is on the roster, the product's own runtime
+prompts belong to it; otherwise the prompt-engineer covers them too.
 
 Deliverable: exactly one new file at .claude/agents/prompt-engineer.md, then stop for
 my review. Do not create any other agents or files, and do not run git commands.
@@ -18,14 +19,18 @@ follows.
 <reference_material>
 Read in this order and read nothing else:
 
-1. All five files in library/prompt-engineering-refs/ (short curated technique refs).
+1. The short technique refs in library/prompt-engineering-refs/: core_techniques,
+   advanced_techniques, common_mistakes, prompt_templates, and claude_4_best_practices.
 2. library/prompt-engineering-for-llms/manifest.json, then choose and read AT MOST
    three chapters, preferring those covering instruction writing, prompt structure
    and content assembly, and evaluation or testing of prompts. Never read the whole
    book; the library protocol is index first, matching chapters only.
 
-The refs mention older model names such as "Claude 4.x" and "Opus 4". The practices
-still apply; ignore the version labels.
+The technique refs above are model-agnostic. The folder also holds current-model
+behavior guides (claude_prompting_best_practices and prompting_claude_<model>) for the
+finished agent to grep as needed; you do not need to read them now. Where an older ref
+names "Claude 4.x" or "Opus 4", the technique still applies; the current-model guides
+carry model-specific behavior.
 </reference_material>
 
 <output_requirements>
@@ -34,8 +39,9 @@ The file must be a valid Claude Code subagent definition:
 - YAML frontmatter with:
   - name: prompt-engineer
   - description: written in third person for automatic delegation, stating clearly
-    WHEN to use it (any time a prompt, agent definition, CLAUDE.md, slash command,
-    or runtime prompt is created, reviewed, or revised)
+    WHEN to use it (any time a prompt, agent definition, CLAUDE.md, AGENTS.md, or slash
+    command is created, reviewed, or revised, plus the product's own runtime prompts when
+    no ai-engineer role owns them)
   - tools: Read, Grep, Glob, Write, Edit
 - Body: the agent's system prompt, under 150 lines, containing:
   - Role and scope. It drafts and reviews prompt artifacts; it never invents project
